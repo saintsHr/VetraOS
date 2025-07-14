@@ -1,5 +1,5 @@
-OBJECTS = kernel.o terminal.o boot.o
-SOURCES = boot.s kernel.c src/terminal.c
+OBJECTS = kernel.o terminal.o boot.o utils.o
+SOURCES = boot.s kernel.c src/terminal.c src/utils.c
 
 CC = i686-elf-gcc
 AS = i686-elf-as

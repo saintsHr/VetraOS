@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "terminal.h"
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -101,7 +102,7 @@ void print(const char* data)
 	terminal_write(data, strlen(data));
 }
 
-void clearScreen()
+void clearTerminal()
 {
 	uint16_t *video_memory = (uint16_t*) VGA_MEMORY;
 	for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++){
