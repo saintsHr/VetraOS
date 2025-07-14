@@ -1,5 +1,5 @@
-OBJECTS = kernel.o terminal.o boot.o utils.o
-SOURCES = boot.s kernel.c src/terminal.c src/utils.c
+OBJECTS = kernel.o terminal.o boot.o utils.o keyboard.o
+SOURCES = boot.s kernel.c src/terminal.c src/utils.c src/keyboard.c
 
 CC = i686-elf-gcc
 AS = i686-elf-as
@@ -16,4 +16,14 @@ clear:
 	rm -f myos.bin
 
 run:
+	qemu-system-i386 myos.iso
+
+full:
+	$(AS) boot.s -o boot.o
+	$(CC) -c $(SOURCES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -Iinclude
+	$(CC) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib $(OBJECTS) -lgcc
+	cp myos.bin isodir/boot/myos.bin
+	grub-mkrescue -o myos.iso isodir
+	rm -f *.o
+	rm -f myos.bin
 	qemu-system-i386 myos.iso

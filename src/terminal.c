@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "terminal.h"
+#include "utils.h"
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -47,6 +48,7 @@ size_t strlen(const char* str)
 
 size_t terminal_row;
 size_t terminal_column;
+
 uint8_t terminal_color;
 uint16_t* terminal_buffer = (uint16_t*)VGA_MEMORY;
 
@@ -97,15 +99,61 @@ void terminal_write(const char* data, size_t size)
 	}
 }
 
-void print(const char* data)
+void terminal_print(const char* data)
 {
 	terminal_write(data, strlen(data));
 }
 
-void clearTerminal()
+void terminal_erase()
+{
+	if (terminal_column > 6)
+	{
+		terminal_putentryat(' ', 15, terminal_column - 1, terminal_row);
+		terminal_column--;
+	}
+}
+
+void terminal_moveCursor(uint8_t row, uint8_t col)
+{
+	uint16_t position = row * 80 + col;
+
+	utils_outb(0x3D4, 0x0F);
+	utils_outb(0x3D5, (uint8_t)(position & 0xFF));
+
+	utils_outb(0x3D4, 0x0E);
+	utils_outb(0x3D5, (uint8_t)((position >> 8) & 0xFF));
+}
+
+void terminal_updateCursor()
+{
+	terminal_moveCursor(terminal_row, terminal_column);
+}
+
+void terminal_incCursor()
+{
+	terminal_moveCursor(terminal_row, terminal_column + 1);
+}
+
+void terminal_decCursor()
+{
+	terminal_moveCursor(terminal_row, terminal_column - 1);
+}
+
+void terminal_prompt(const char* prompt)
+{
+	terminal_setcolor(2);
+	terminal_print("\n");
+	terminal_print(prompt);
+	terminal_setcolor(7);
+	terminal_moveCursor((uint8_t)terminal_row, (uint8_t)strlen(prompt));
+}
+
+void terminal_clear()
 {
 	uint16_t *video_memory = (uint16_t*) VGA_MEMORY;
 	for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; i++){
 		video_memory[i] = (0x07 << 8) | ' ';
 	}
+	terminal_column = 0;
+	terminal_row = 0;
 }
