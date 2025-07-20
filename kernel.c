@@ -17,7 +17,7 @@
 void kernel_main(void)
 {
 	terminal_initialize();
-	terminal_prompt("MyOs> ");
+	terminal_prompt("VetraOS> ");
 
 	while (1)
 	{

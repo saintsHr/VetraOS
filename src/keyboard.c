@@ -41,7 +41,7 @@ void keyboard_loop()
             terminal_erase();
             terminal_updateCursor();   
         } else if (c == '\n') {
-            terminal_prompt("MyOS> ");
+            terminal_prompt("VetraOS> ");
         } else {
             terminal_putchar(c);
             terminal_updateCursor();

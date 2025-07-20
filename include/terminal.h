@@ -19,3 +19,4 @@ void terminal_erase();
 void terminal_incCursor();
 void terminal_decCursor();
 void terminal_updateCursor();
+const char* terminal_readLine(uint8_t row, uint8_t offset);

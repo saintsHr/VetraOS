@@ -44,7 +44,8 @@ size_t strlen(const char* str)
 
 #define VGA_WIDTH   80
 #define VGA_HEIGHT  25
-#define VGA_MEMORY  0xB8000 
+#define VGA_MEMORY  0xB8000
+#define VGA_MEMARRAY ((volatile uint8_t*) 0xB8000)
 
 size_t terminal_row;
 size_t terminal_column;
@@ -104,6 +105,20 @@ void terminal_print(const char* data)
 	terminal_write(data, strlen(data));
 }
 
+const char* terminal_readLine(uint8_t row, uint8_t offset)
+{
+	static char buffer[VGA_WIDTH + 1];
+	uint16_t base = (row * VGA_WIDTH + offset) * 2;
+
+	for (uint8_t i = 0; i < VGA_WIDTH - offset; i++)
+	{
+		buffer[i] = VGA_MEMARRAY[base + i * 2];
+	}
+
+	buffer[VGA_WIDTH - offset] = '\0';
+	return buffer;
+}
+
 void terminal_erase()
 {
 	if (terminal_column > 6)
@@ -141,11 +156,23 @@ void terminal_decCursor()
 
 void terminal_prompt(const char* prompt)
 {
-	terminal_setcolor(2);
-	terminal_print("\n");
-	terminal_print(prompt);
-	terminal_setcolor(7);
-	terminal_moveCursor((uint8_t)terminal_row, (uint8_t)strlen(prompt));
+	if (terminal_row < VGA_HEIGHT - 2)
+	{
+		terminal_setcolor(2);
+		terminal_print("\n");
+		terminal_print(prompt);
+		terminal_setcolor(7);
+		terminal_moveCursor((uint8_t)terminal_row, (uint8_t)strlen(prompt));
+	} else {
+		terminal_column = 9;
+		terminal_row = 0;
+		terminal_clear();
+		terminal_setcolor(2);
+		terminal_print("\n");
+		terminal_print(prompt);
+		terminal_setcolor(7);
+		terminal_moveCursor((uint8_t)terminal_row, (uint8_t)strlen(prompt));
+	}
 }
 
 void terminal_clear()
