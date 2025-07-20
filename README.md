@@ -37,10 +37,3 @@ but you can build it with some extra effort and tools, the recomended way to bui
 4. run `make clear` (optional, if you want to clear the .o and .bin files)
 
 5. run `make run` if you want to test (qemu needed for this step!)
-
-if you are on linux you can simply run this command to do everything:
-
-debian or ubuntu:
-
-`sudo apt update && sudo apt install -y build-essential qemu
-grub-pc-bin xorriso mtools gcc i686-elf-gcc binutils && make full`
