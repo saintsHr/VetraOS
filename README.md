@@ -42,5 +42,5 @@ if you are on linux you can simply run this command to do everything:
 
 debian or ubuntu:
 
-`sudo apt update && sudo apt install -y build-essential qemu  
+`sudo apt update && sudo apt install -y build-essential qemu
 grub-pc-bin xorriso mtools gcc i686-elf-gcc binutils && make full`
