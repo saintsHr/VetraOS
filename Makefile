@@ -7,23 +7,23 @@ AS = i686-elf-as
 all:
 	$(AS) boot.s -o boot.o
 	$(CC) -c $(SOURCES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -Iinclude
-	$(CC) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib $(OBJECTS) -lgcc
-	cp myos.bin isodir/boot/myos.bin
-	grub-mkrescue -o myos.iso isodir
+	$(CC) -T linker.ld -o vetraos.bin -ffreestanding -O2 -nostdlib $(OBJECTS) -lgcc
+	cp vetraos.bin isodir/boot/vetraos.bin
+	grub-mkrescue -o vetraos.iso isodir
 
 clear:
 	rm -f *.o
-	rm -f myos.bin
+	rm -f vetraos.bin
 
 run:
-	qemu-system-i386 myos.iso
+	qemu-system-i386 vetraos.iso
 
 full:
 	$(AS) boot.s -o boot.o
 	$(CC) -c $(SOURCES) -std=gnu99 -ffreestanding -O2 -Wall -Wextra -Iinclude
-	$(CC) -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib $(OBJECTS) -lgcc
-	cp myos.bin isodir/boot/myos.bin
-	grub-mkrescue -o myos.iso isodir
+	$(CC) -T linker.ld -o vetraos.bin -ffreestanding -O2 -nostdlib $(OBJECTS) -lgcc
+	cp vetraos.bin isodir/boot/vetraos.bin
+	grub-mkrescue -o vetraos.iso isodir
 	rm -f *.o
-	rm -f myos.bin
-	qemu-system-i386 myos.iso
+	rm -f vetraos.bin
+	qemu-system-i386 vetraos.iso
