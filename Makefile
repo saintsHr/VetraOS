@@ -13,7 +13,7 @@ all:
 
 clear:
 	rm -f *.o
-	rm -f vetraos.bin
+	rm -f *.bin
 
 run:
 	qemu-system-i386 vetraos.iso
@@ -25,5 +25,5 @@ full:
 	cp vetraos.bin isodir/boot/vetraos.bin
 	grub-mkrescue -o vetraos.iso isodir
 	rm -f *.o
-	rm -f vetraos.bin
+	rm -f *.bin
 	qemu-system-i386 vetraos.iso
